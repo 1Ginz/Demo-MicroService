@@ -9,6 +9,8 @@ import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +23,7 @@ import reactor.util.function.Tuple2;
 
 @RequestMapping("/product")
 @RestController
-
+@RefreshScope
 public class Controller {
 
 
@@ -41,11 +43,19 @@ public class Controller {
 
     private ProductService productService;
 
+    @Value("${message}")
+    private String message;
+
 
     Controller(RestTemplate restTemplate) {
 
         productService = new ProductService();
         this.restTemplate = restTemplate;
+    }
+
+    @GetMapping("/message")
+    public String getMessage(){
+        return this.message;
     }
 
 
